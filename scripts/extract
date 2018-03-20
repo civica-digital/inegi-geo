@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-wget http://geoweb2.inegi.org.mx/mgn2kData/mgntmp/9F81223499D7CF17EC298CA2A807894D/ARCH724.CSV -O datasets/states.csv
-wget http://geoweb2.inegi.org.mx/mgn2kData/mgntmp/9F81223499D7CF17EC298CA2A807894D/ARCH95.CSV -O datasets/municipalities.csv
-wget http://geoweb2.inegi.org.mx/mgn2kData/mgntmp/9F81223499D7CF17EC298CA2A807894D/ARCH528.CSV -O datasets/localities.csv
