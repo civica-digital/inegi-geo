@@ -1,13 +1,16 @@
 # INEGI (Geospatial database)
-> `inegi-geo` a ruby wrapper for the Mexican [INEGI geospatial database][inegi]
+> Imports [INEGI geospatial database][inegi] into a readable CSV
 
-Every application that interacts with the INGEI's database implements their
-own _snowflake_ solution, or using a standalone copy of the data, causing
-**inconsistencies**, and missing the benefits of having a
-centralized source of truth.
+Every application interacting with the INGEI's geospatial data, uses a
+standalone copy of the database, or implements its own _snowflake_ solution,
+causing **inconsistencies**, missing the benefits of having a centralized
+source of truth.
 
-`inegi-geo` allows you to:
-- Import the INEGI's geospatial database into **PostgreSQL**
+Unluckily we couldn't figure out how to prevent this :sweat:.
+
+However, `inegi-geo` removes the hassle of importing the INEGI's geospatial
+data into a readable CSV that you can edit to select the combinations you
+want.
 
 ## Installation
 
