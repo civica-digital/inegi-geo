@@ -5,14 +5,14 @@ Gem::Specification.new do |s|
   s.version     = '0.0.1'
   s.authors     = ['mroutis']
   s.email       = ['outis@civica.digital']
-  s.summary     = 'A Ruby wrapper for INEGI geospatial database'
-  s.files       = ['lib/hola.rb']
+  s.summary     = 'Imports INEGI geospatial database into a readable CSV'
+  s.files       = `git ls-files -z`.split("\x0")
   s.homepage    = 'https://github.com/civica-digital/inegi-geo'
-  s.license     = 'MIT'
+  s.license     = 'unlicense'
 
-  s.add_dependency 'dbf'
-  s.add_dependency 'down'
-  s.add_dependency 'rubyzip'
+  s.add_dependency 'dbf', '~> 3.1'
+  s.add_dependency 'down', '~> 4.4'
+  s.add_dependency 'rubyzip', '~> 1.2'
 
   s.add_development_dependency 'bundler', '~> 1.16'
 end
