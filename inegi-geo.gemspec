@@ -2,7 +2,7 @@ $:.push File.expand_path('../lib', __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = 'inegi-geo'
-  s.version     = '0.0.1'
+  s.version     = '0.0.2'
   s.authors     = ['mroutis']
   s.email       = ['outis@civica.digital']
   s.summary     = 'Imports INEGI geospatial database into a readable CSV'
