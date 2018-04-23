@@ -1,7 +1,7 @@
 # INEGI (Geospatial database)
 > Imports [INEGI geospatial database][inegi] into a readable CSV
 
-Every application interacting with the INGEI's geospatial data, uses a
+Every application interacting with the INEGI's geospatial data, uses a
 standalone copy of the database, or implements its own _snowflake_ solution,
 causing **inconsistencies**, missing the benefits of having a centralized
 source of truth.
@@ -181,7 +181,7 @@ update_references
 ```
 
 The code above imports the data from the CSV to the models, and update
-the references. The time to run this (in my computer) is below **1 second**.
+the references. The time to run this (in my computer) is below **1 minute**.
 
 ## References
 - [guivaloz/INEGI](https://github.com/guivaloz/INEGI)
