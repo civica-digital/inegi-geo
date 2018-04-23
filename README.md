@@ -29,11 +29,72 @@ Or install it yourself:
 $ gem install inegi-geo
 ```
 
+## Usage
+
+Once the gem is installed, run the following command to **download** the dataset
+and **transform** it into a CSV.
+
+```bash
+rake inegi:geo:download inegi:geo:transform
+
+# DOWNLOADED: states.zip (%100)
+# DOWNLOADED: municipalities.zip (%100)
+# DOWNLOADED: localities.zip (%100)
+# UNZIP: localities.zip -> localities.dbf
+# UNZIP: municipalities.zip -> municipalities.dbf
+# UNZIP: states.zip -> states.dbf
+# CONVERTED: localities.dbf -> localities.csv
+# CONVERTED: municipalities.dbf -> municipalities.csv
+# CONVERTED: states.dbf -> states.csv
+```
+
+After editing the CSV to select the columns that you want, you can use
+[activerecord-import][activerecord-import] to insert the data in the CSVs into
+your database.
+
+_:warning: Review and understand the code before copying and pasting it._
+
+In this example, I chose to store `State`, `Municipality`, and `Locality`.
+
+```bash
+rails generate model state code:string \
+                           name:string
+
+rails generate model municipality code:string \
+                                  name:string \
+                                  state_code:string \
+                                  state:references
+
+rails generate model locality code:string \
+                              name:string \
+                              state_code:string \
+                              state:references \
+                              municipality_code:string \
+                              municipality:references
+```
+
+```ruby
+require 'activerecord-import/base'
+require 'activerecord-import/active_record/adapters/postgresql_adapter'
+
+def import_states
+  State.transaction do
+    dataset = Rails.root.join('datasets', 'states.csv')
+    rows = CSV.read(dataset)
+    headers = rows.delete_at(0)
+    State.import(headers, rows, validate: false)
+  end unless State.count > 0
+
+  puts "Imported states: #{State.count}"
+end
+```
+
 ## References
 - [guivaloz/INEGI](https://github.com/guivaloz/INEGI)
 - [evilmartians/fias](https://github.com/evilmartians/fias)
 
 [inegi]: http://www.inegi.org.mx/geo/contenidos/geoestadistica/
+[activerecord-import]: https://github.com/zdennis/activerecord-import
 
 ## License
 This is free and unencumbered software released into the public domain.

@@ -1,4 +1,4 @@
-"state_code","state_name","state_abbreviation","","capital_name","total_population","masculine_population","femenine_population","inhabited_residences"
+"state_code","state_name","state_abbreviation","capital_code","capital_name","total_population","masculine_population","femenine_population","inhabited_residences"
 "01","Aguascalientes","Ags.","0010001","Aguascalientes","1184996","576638","608358","290877"
 "02","Baja California","BC","0020001","Mexicali","3155070","1591610","1563460","870769"
 "03","Baja California Sur","BCS","0030001","La Paz","637026","325433","311593","178271"

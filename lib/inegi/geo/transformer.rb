@@ -57,6 +57,7 @@ class Inegi::Geo::Transformer
       CVE_MUN: 'municipality_code',
       CVE_CAB: 'head_code',
       CVE_LOC: 'locality_code',
+      CVE_CAP: 'capital_code',
       NOM_ENT: 'state_name',
       NOM_ABR: 'state_abbreviation',
       NOM_CAP: 'capital_name',
