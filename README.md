@@ -48,9 +48,57 @@ rake inegi:geo:download inegi:geo:transform
 # CONVERTED: states.dbf -> states.csv
 ```
 
+Delete the `.zip` and `.dbf` or put them on your `.gitignore` if you want
+to save them locally.
+
+```bash
+rm -f datasets/*[^.csv]
+```
+
 After editing the CSV to select the columns that you want, you can use
 [activerecord-import][activerecord-import] to insert the data in the CSVs into
 your database.
+
+```bash
+# head -n 5 states.csv
+
+"code","name"
+"01","Aguascalientes"
+"02","Baja California"
+"03","Baja California Sur"
+"04","Campeche"
+```
+
+```bash
+# head -n 5 municipalities.csv
+
+"state_code","code","name"
+"01","001","Aguascalientes"
+"01","002","Asientos"
+"01","003","Calvillo"
+"01","004","Cosío"
+```
+
+```bash
+# head -n 5 localities.csv
+
+"state_code","municipality_code","code","name"
+"01","001","0001","Aguascalientes"
+"01","001","0094","Granja Adelita"
+"01","001","0096","Agua Azul"
+"01","001","0100","Rancho Alegre"
+```
+
+The size of the CSVs:
+
+```txt
+Size Name
+---- ----
+ 10M localities.csv
+ 68k municipalities.csv
+ 612 states.csv
+```
+
 
 _:warning: Review and understand the code before copying and pasting it._
 
@@ -77,17 +125,63 @@ rails generate model locality code:string \
 require 'activerecord-import/base'
 require 'activerecord-import/active_record/adapters/postgresql_adapter'
 
-def import_states
-  State.transaction do
-    dataset = Rails.root.join('datasets', 'states.csv')
-    rows = CSV.read(dataset)
-    headers = rows.delete_at(0)
-    State.import(headers, rows, validate: false)
-  end unless State.count > 0
+def import_from_csv(dataset)
+  file = Rails.root.join('datasets', "#{dataset}.csv")
+  klass = dataset.classify.constantize
 
-  puts "Imported states: #{State.count}"
+  return if klass.count > 0
+
+  print "\rImporting #{dataset.pluralize}..."
+
+  klass.transaction do
+    rows = CSV.read(file)
+    headers = rows.delete_at(0)
+    klass.import(headers, rows, validate: false)
+  end
+
+  puts "\rImported #{dataset.pluralize}: #{klass.count}"
 end
+
+def update_references
+  return unless Municipality.where(state_id: nil).exists? ||
+                Locality.where(municipality_id: nil).exists?
+
+  print "\rUpdating references..."
+
+  states = <<~SQL
+    UPDATE municipalities
+    SET state_id = states.id
+    FROM states
+    WHERE municipalities.state_code = states.code;
+
+    UPDATE localities
+    SET state_id = states.id
+    FROM states
+    WHERE localities.state_code = states.code;
+  SQL
+
+  municipalities = <<~SQL
+    UPDATE localities
+    SET municipality_id = municipalities.id
+    FROM municipalities
+    WHERE localities.state_code = municipalities.state_code
+      AND localities.municipality_code = municipalities.code;
+  SQL
+
+  ActiveRecord::Base.connection.execute(states)
+  ActiveRecord::Base.connection.execute(municipalities)
+
+  puts "\rUpdating references: DONE"
+end
+
+import_from_csv 'states'
+import_from_csv 'municipalities'
+import_from_csv 'localities'
+update_references
 ```
+
+The code above imports the data from the CSV to the models, and update
+the references. The time to run this (in my computer) is below **1 second**.
 
 ## References
 - [guivaloz/INEGI](https://github.com/guivaloz/INEGI)

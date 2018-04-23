@@ -53,20 +53,25 @@ class Inegi::Geo::Transformer
 
   def translate_header(header)
     dictionary = {
-      CVE_ENT: 'state_code',
-      CVE_MUN: 'municipality_code',
+      AMBITO: 'area_type',
+      ALTITUD: 'altitude',
+      LATITUD: 'latitude',
+      LONGITUD: 'longitude',
       CVE_CAB: 'head_code',
-      CVE_LOC: 'locality_code',
       CVE_CAP: 'capital_code',
-      NOM_ENT: 'state_name',
+      CVE_CARTA: 'map_code',
+      CVE_ENT: 'state_code',
+      CVE_LOC: 'locality_code',
+      CVE_MUN: 'municipality_code',
       NOM_ABR: 'state_abbreviation',
-      NOM_CAP: 'capital_name',
-      NOM_MUN: 'municipality_name',
       NOM_CAB: 'head_name',
+      NOM_CAP: 'capital_name',
+      NOM_ENT: 'state_name',
       NOM_LOC: 'locality_name',
-      PTOT: 'total_population',
-      PMAS: 'masculine_population',
+      NOM_MUN: 'municipality_name',
       PFEM: 'femenine_population',
+      PMAS: 'masculine_population',
+      PTOT: 'total_population',
       VTOT: 'inhabited_residences',
     }
 
